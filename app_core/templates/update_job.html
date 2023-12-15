@@ -1,0 +1,25 @@
+<!-- job_portal/templates/update_job.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container">
+    <div style="padding-bottom: 300px;">
+      <h2>Update Job</h2>
+    <form method="post" action="{% url 'update_job' job_post.id %}">
+      {% csrf_token %}
+      <div class="row">
+        <div class="col-md-6">
+          <div class="mb-3">{{ form.title }}</div>
+          <div class="mb-3"> {{ form.openings }}</div>
+          <div class="mb-3"> {{ form.category }}</div>
+          <button type="submit" class="btn btn-primary mt-2">Update Job</button>
+        </div>
+        <div class="col-md-6" style="padding-bottom: 300px;">
+          {{ form.description }}
+          {{ form.skill_set }}
+        </div>
+      </div>
+    </form>
+    </div>
+  </div>
+{% endblock %}

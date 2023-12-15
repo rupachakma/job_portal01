@@ -1,0 +1,32 @@
+<!-- app_core/templates/skill_matched_jobs.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h2>Skill Matched Jobs</h2>
+    <hr>
+    <div class="row">
+      {% for job in matching_jobs %}
+        <div class="col-md-4 mb-4">
+          <div class="card">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <h5 class="card-title">{{ job.title }}</h5>
+                <span>{{ job.posted_at|date:"M. d, Y" }}</span>
+              </div>
+              <small class='text-muted'>by: {{ job.recruiter.company_name }}</small>
+              <span class="badge bg-secondary">{{ job.category }}</span>
+              <p class="card-text mt-2">{{ job.description |truncatechars:250 }}</p>
+              <div class="skills-badges">Skills:
+                {% for skill in job.skill_set.all %}
+                  <p class="badge bg-primary">{{ skill.name }}</p>
+                {% endfor %}
+              </div>
+              <a href="{% url 'job_detail' pk=job.pk %}" class="btn btn-dark mt-2">View Details</a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}

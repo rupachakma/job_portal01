@@ -1,0 +1,33 @@
+<!-- templates/job_portal/apply_confirm.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h2>Confirm Application</h2>
+        <p>You are about to apply for the following job:</p>
+        <h3>{{ job_post.title }}</h3>
+        <p>{{ job_post.description }}</p>
+        <p>Skills required:
+            {% for skill in job_post.skill_set.all %}
+                <span class="badge bg-secondary">{{ skill.name }}</span>
+            {% endfor %}
+        </p>
+        
+        <p>Your profile information:</p>
+        <p>Name: {{ job_seeker_profile.user_profile.display_name }}</p>
+        <p>Skills:
+            {% for skill in job_seeker_profile.skills.all %}
+                <span class="badge bg-secondary">{{ skill.name }}</span>
+            {% endfor %}
+        </p>
+        <p>Resume: {{ job_seeker_profile.resume.url }}</p>
+        
+        <form method="post" action="{% url 'apply' job_post.id %}">
+            {% csrf_token %}
+            <!-- You can include additional fields or information here -->
+            <button type="submit" class="btn btn-primary mt-3">Confirm Apply</button>
+        </form>
+
+        <a href="{% url 'jobs' %}" class="btn btn-secondary mt-3">Back to Jobs</a>
+    </div>
+{% endblock %}

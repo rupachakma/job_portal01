@@ -1,0 +1,19 @@
+<!-- templates/job_portal/job_detail.html -->
+{% extends 'base.html' %}  <!-- Assuming you have a base template -->
+
+{% block content %}
+    <div class="container mt-4">
+        <h2>{{ job.title }}</h2>
+        <p>{{ job.description }}</p>
+        <div class="skills-badges">Skills:
+            {% for skill in job.skill_set.all %}
+                <p class="badge bg-secondary ">{{ skill.name }}</p>
+            {% endfor %}
+        </div>
+        {% if user.is_authenticated and user.user_type == 'JobSeeker' %}
+            <a href="{% url "apply" job_id=job.id %}" class="btn btn-primary" >Apply for the post</a>
+        {% endif %}
+        <!-- Add more details as needed -->
+        <a href="{% url 'jobs' %}" class="btn btn-secondary">Back to Jobs</a>
+    </div>
+{% endblock %}

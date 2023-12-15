@@ -1,0 +1,25 @@
+<!-- job_portal/templates/jobseeker_profile.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center">
+      <h2 class="text-muted">Hello👋 {{ user.display_name }}</h2>
+      <a href="{% url "profile_creation" %}" class="btn btn-primary text-white"><i class="ri-edit-box-line"></i> Update profile</a>
+    </div>
+    <hr>
+    <h2 class="mb-2">My Skills:</h2>
+    <div class="mb-4">
+      {% for skill in profile_data.skills.all %}
+        <span class="badge bg-danger">{{ skill.name }}</span>
+      {% endfor %}
+    </div>
+    {% if profile_data.resume %}
+      <a href="{{ profile_data.resume.url }}" class="btn btn-success"><i class="ri-file-download-line"></i> Download Resume</a>
+    {% endif %}
+    <!-- Add more fields as needed -->
+  </div>
+{% endblock %}
+
+
+{% comment %} {% if not forloop.last %}, {% endif %} {% endcomment %}

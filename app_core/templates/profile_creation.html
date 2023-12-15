@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container">
+    <h2>Create Profile</h2>
+    <form method="post" action="{% url 'profile_creation' %}" enctype="multipart/form-data">
+      {% csrf_token %}
+      {% if user.user_type == 'JobSeeker' %}
+        <div class="row">
+          <div class="col-md-6">
+            {{ form.display_name }}
+            {{ form.email }}
+            {{ form.skills }}
+          </div>
+          <div class="col-md-6">
+            {{ form.resume }}
+            <button type="submit" class="btn btn-primary mt-2">Create Profiles</button>
+          </div>
+        </div>
+      {% endif %}
+      {% if user.user_type == 'Recruiter' %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary mt-2">Create Profile</button>
+      {% endif %}
+    </form>
+  </div>
+{% endblock %}
+
+
+

@@ -1,0 +1,34 @@
+<!-- templates/view_applications.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <h2>{{ job.title }} Applications</h2>
+        {% if applications %}
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Applicant</th>
+                        <th>Application Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for application in applications %}
+                        <tr>
+                            <td>{{ application.job_seeker_profile.user_profile.display_name }}</td>
+                            <td>{{ application.application_date }}</td>
+                            <td>
+                                <a href="{% url 'download_resume' pk=application.job_seeker_profile.user_profile.id %}" class="btn btn-primary btn-sm">
+                                    <i class="ri-download-cloud-2-line"></i> Download Resume
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No applications to display.</p>
+        {% endif %}
+    </div>
+{% endblock %}

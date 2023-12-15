@@ -1,0 +1,135 @@
+
+<!-- templates/job_portal/job_list.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% if user.is_authenticated and user.user_type == 'JobSeeker' %}
+<!-- New skill-matched jobs carousel -->
+<section class="pt-5 pb-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 mx-auto my-auto mb-4">
+                <h3 class="mb-md-3">Jobs based on your skills</h3>
+                <p>Presenting all jobs based on your current skill set, <br> you can still update your skill set from your profile section.</p>
+                <a href="{% url "skill_matched_jobs" %}" class="btn btn-dark">All matched Jobs</a>
+            </div>
+            <div class="col-md-6 mx-auto">
+                <div id="skillMatchedJobsCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        {% for job in matching_jobs %}
+                            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h4 class="card-title">{{ job.title }}</h4>
+                                                <small class='text-muted'>by: {{job.recruiter.company_name}}</small>
+                                                <span class="badge bg-secondary">{{job.category}}</span>
+                                                <p class="card-text mt-2">{{ job.description |truncatechars:50 }}</p>
+                                                <div class="skills-badges">Skills:
+                                                    {% for skill in job.skill_set.all %}
+                                                        <p class="badge bg-primary ">{{ skill.name }}</p>
+                                                    {% endfor %}
+                                                </div>
+                                                <a href="{% url 'job_detail' pk=job.pk %}" class="btn btn-dark mt-2">View Details</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <!-- Add navigation buttons -->
+                    {% comment %} <button class="carousel-control-prev" type="button" data-bs-target="#skillMatchedJobsCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#skillMatchedJobsCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button> {% endcomment %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+    <div class="container mt-4">
+        <!-- Input group for search and filter options -->
+            <form method="get" action="{% url 'jobs' %}" id="searchForm" class="form">
+                <div class="input-group mb-5 alert alert-info">
+                        <input type="text" class="form-control form-control-lg" placeholder="Search by title or skill" id="searchInput">
+                        
+                        <!-- Categories Dropdown -->
+                        <select class="form-control" id="categoryDropdown">
+                            <option value="">All Categories</option>
+                            {% for category in categories %}
+                                <option value="{{ category.id }}">{{ category.name }}</option>
+                            {% endfor %}
+                        </select>
+        
+                        <div class="input-group-append">
+                            <button class="btn btn-lg btn-primary" type="submit" id="searchButton"><i class="ri-search-line"></i> Search</button>
+                        </div>
+                </div>
+            </form>
+
+        {% comment %} in here add a input group for search and filter option {% endcomment %}
+        <h2>All Jobs</h2>
+        <hr>
+        <div class="row">
+            {% for job in jobs %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <h5 class="card-title">{{ job.title }}</h5> 
+                                <span>{{ job.posted_at|date:"M. d, Y" }}</span>
+                            </div>
+                            <small class='text-muted'>by: {{job.recruiter.company_name}}</small>
+                            <span class="badge bg-secondary">{{job.category}}</span>
+                            {% comment %} <p class="card-text">{{ job.description |truncatewords:30 }}</p> {% endcomment %}
+                            <p class="card-text mt-2">{{ job.description |truncatechars:250 }}</p>
+                            <div class="skills-badges">Skills:
+                                {% for skill in job.skill_set.all %}
+                                    <p class="badge bg-primary  ">{{ skill.name }}</p>
+                                {% endfor %}
+                            </div>
+                            <a href="{% url 'job_detail' pk=job.pk %}" class="btn btn-dark mt-2">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+
+
+    <!-- JavaScript for search functionality -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            const categoryDropdown = document.getElementById('categoryDropdown');
+            const searchButton = document.getElementById('searchButton');
+            const form = document.getElementById('searchForm');
+    
+            searchButton.addEventListener('click', function() {
+                const searchTerm = searchInput.value.trim();
+                const categoryId = categoryDropdown.value;
+    
+                // Update the form with hidden input fields for search parameters
+                form.innerHTML = `
+                    <input type="hidden" name="title" value="${encodeURIComponent(searchTerm)}">
+                    <input type="hidden" name="category" value="${encodeURIComponent(categoryId)}">
+                `;
+    
+                // Submit the form
+                form.submit();
+            });
+        });
+    </script>
+{% endblock %}
+
+

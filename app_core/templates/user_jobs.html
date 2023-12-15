@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container">
+    {% if user.user_type == 'Recruiter' %}
+      <h2>Your Posted Jobs</h2>
+      {% if jobs %}
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Job Title</th>
+              <th>Edit Job</th>
+              <th>Total Applications</th>
+              <th>Delete Job</th>
+              <th>View Applications</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for job in jobs %}
+              <tr>
+                <td>{{ job.title }}</td>
+                <td><a href="{% url 'update_job' job_id=job.pk %}" class="btn btn-primary btn-sm"><i class="ri-edit-box-line"></i> Edit</a></td>
+                <td>{{ job.num_applications }}</td>
+                <td>
+                  <form method="post" action="{% url 'delete_job' job_id=job.pk %}" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-sm"><i class="ri-delete-bin-line"></i> Delete</button>
+                  </form>
+                </td>
+                <td><a href="{% url 'view_applications' job_id=job.pk %}" class="btn btn-primary btn-sm"><i class="ri-eye-line"></i> View Applications</a></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <p>No jobs to display.</p>
+      {% endif %}
+    {% elif user.user_type == 'JobSeeker' %}
+      <h2>Your Applied Jobs</h2>
+      {% if jobs %}
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Job Title</th>
+              <th>Recruiter</th>
+              <th>Application Date</th>
+              <th>View Job</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for job in jobs %}
+              <tr>
+                <td>{{ job.job_post.title }}</td>
+                <td>{{ job.job_post.recruiter.company_name }}</td>
+                <td>{{ job.application_date }}</td>
+                <td><a href="{% url 'job_detail' pk=job.job_post.pk %}" class="btn btn-dark btn-sm text-white"><i class="ri-eye-line"></i> View Job</a></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <p>No applied jobs.</p>
+      {% endif %}
+    {% endif %}
+  </div>
+{% endblock %}
+

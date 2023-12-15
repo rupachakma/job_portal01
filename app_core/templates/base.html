@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FlexJob | Find your job from desk!</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.7.0/fonts/remixicon.css" rel="stylesheet">
+    
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+    
+    .content {
+        flex: 1;
+    }
+    
+    .footer {
+        background-color: #343a40; /* Dark background color */
+        color: #fff; /* Light text color */
+        padding: 20px; /* Adjust the padding as needed */
+        margin-top: auto; /* This will push the footer to the bottom */
+    }
+  </style>
+  </head>
+  <body style="overflow-x: hidden;">
+    <nav class="navbar navbar-expand-lg navbar-light bg-primary" data-bs-theme='dark'>
+        <div class="container">
+          <a class="navbar-brand fw-bolder fs-4" href="{% url "jobs" %}"><i class="ri-briefcase-4-fill"></i> FlexJob</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto">
+                {% if user.is_authenticated %}
+                  {% if user.user_type == 'Recruiter' %}
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'job_post' %}"><i class="ri-edit-box-line"></i> Post a Job</a>
+                    </li>
+                  {% endif %}
+                  <div class="dropdown">
+                    <button class="btn dropdown-toggle" data-bs-toggle="dropdown" href="{% url 'profile' %}"><i class="ri-user-3-line"></i> My Account</button>
+                    <ul class="dropdown-menu">
+                      <li><a class="dropdown-item mb-2" href="{% url "profile" %}"><i class="ri-user-3-fill"></i> Profile</a></li>
+                      <li><a class="dropdown-item mb-2" href="{% url "user_jobs" %}"><i class="ri-briefcase-3-line"></i> My Jobs</a></li>
+                      <li><a class="dropdown-item" href="{% url "logout" %}"><i class="ri-logout-circle-r-line"></i> logout</a></li>
+                    </ul>
+                  </div>
+                  {% else %}
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'register' %}"><i class="ri-edit-line"></i> Register</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}"><i class="ri-user-3-line"></i> Login</a>
+                  </li>
+                {% endif %}
+                
+            </ul>
+          </div>
+        </div>
+      </nav>
+      {% block content %}{% endblock content %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    
+    <!-- Footer -->
+  <footer class="footer mt-auto">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+          <h5>About FlexJob</h5>
+          <p>FlexJob is your go-to job portal, connecting talented individuals with exciting career opportunities.
+             We are dedicated to helping you find the perfect job and supporting companies in building their dream teams.
+          </p>
+        </div>
+        <div class="col-md-4">
+          <h5>Quick Links</h5>
+          <ul class="list-unstyled">
+            <li><a href="{% url 'jobs' %}" class="text-light">Home</a></li>
+            <li><a href="{% url 'jobs' %}" class="text-light">Jobs</a></li>
+            <li><a href="#" class="text-light">About</a></li>
+            <li><a href="#" class="text-light">Contact</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4">
+          <h5>Contact Us</h5>
+          <address>
+            <p>FlexJob Headquarters</p>
+            <p>Email: info@flexjob.com</p>
+            <p>Phone: +1 (662) 736-5057</p>
+          </address>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  </body>
+</html>
+
