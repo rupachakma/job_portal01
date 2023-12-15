@@ -18,6 +18,8 @@ class CustomUserCreationForm(UserCreationForm):
         }
 
 class RecruiterProfileForm(forms.ModelForm):
+    company_name = forms.CharField(label='Company Name',widget=forms.TextInput(attrs={'class':'form-control'}))
+    address = forms.CharField(widget=forms.Textarea(attrs={'class':'form-control'}))
     class Meta:
         model = RecruiterProfile
         fields = ['company_name', 'address']
